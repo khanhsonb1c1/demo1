@@ -27,7 +27,6 @@ const userController = {
         username,
         password,
         role: "2",
-        // Trong thực tế, bạn nên mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
       };
 
       const accessToken = jwt.sign(newUser, process.env.SECRECT_KEY, {
@@ -40,18 +39,34 @@ const userController = {
 
       console.log(refresh_token, "res");
 
-        const updateQuery = `INSERT INTO Login (TenDangNhap, MatKhau, LoaiNguoiDung, REFRESH_TOKEN) VALUES ('${username}', '${password}', '2','${refresh_token}')`;
+      const options = {
+        autoCommit: true, // Tự động commit thay đổi
+      };
 
-        console.log(updateQuery, "update value");
+      const binds = {
+        username: username,
+        password: password,
+        role: "2",
+        refreshToken: refresh_token,
+      };
 
-        await connection.execute(updateQuery);
+      const updateQuery =
+        "INSERT INTO Login (TenDangNhap, MatKhau, LoaiNguoiDung, REFRESH_TOKEN) VALUES (:username, :password, :role, :refreshToken)";
 
-      res.status(200).json({
-        message: "Đăng ký thành công",
-        access_token: accessToken,
-      });
+      const resultUpdate = await connection.execute(
+        updateQuery,
+        binds,
+        options
+      );
+
+      if (resultUpdate) {
+        return res.status(200).json({
+          message: "Đăng ký thành công",
+          access_token: accessToken,
+        });
+      }
     } catch (error) {
-      res.send(error);
+      return res.send(error);
     }
   },
 

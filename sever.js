@@ -108,7 +108,7 @@ app.get("/MonAn", async (req, res) => {
   try {
     const connection = await oracledb.getConnection(dbConfig);
 
-    const result = await connection.execute("SELECT * FROM MonAn");
+    const result = await connection.execute("SELECT * FROM Login");
     const jsonData = result.rows.map((row) => {
         return {
             id: row[0],
