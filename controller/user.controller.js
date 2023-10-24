@@ -82,11 +82,15 @@ const userController = {
 
       const result = await connection.execute(query, binds, options);
 
-      if (result.rows.length === 1) {
+      console.log(result.rows[0])
+
+      console.log(process.env.SECRECT_KEY, 'key')
+
+      if (result.rows.length) {
         
         const user = {
-          username: result.rows[0].TenDangNhap,
-          role: result.rows[0].LoaiNguoiDung,
+          username: result.rows[0].TENDANGNHAP,
+          role: result.rows[0].LOAINGUOIDUNG,
         };
   
         // Tạo access token từ thông tin người dùng

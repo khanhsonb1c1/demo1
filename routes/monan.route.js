@@ -4,6 +4,8 @@ const { verifyAdmin } = require("../middleware/authenticate");
 
 const router = require("express").Router();
 
+router.get("/list", monanController.getMonAn);
+
 router.post("/create",verifyAdmin, monanController.createMonan);
 
 router.put("/update/:id",verifyAdmin, monanController.updateMonAn);

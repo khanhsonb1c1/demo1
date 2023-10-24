@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-// const dbConfig = require("../config/connectDB.config");
-// const oracledb = require("oracledb");
+
+
 
 const middlewareAuth = {
   //? verifyToken
@@ -13,10 +13,12 @@ const middlewareAuth = {
       return res.status(401).json({ error: "Token is missing" });
     }
 
-    jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
+    jwt.verify(token, process.env.SECRECT_KEY, (error, decoded) => {
       if (error) {
         return res.status(403).json({ error: "Token is not valid" });
       }
+
+      // console.log(decoded, 'token decode')
 
       if (decoded.role === "1") {
         // Người dùng có quyền truy cập
