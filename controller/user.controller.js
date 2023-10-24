@@ -71,7 +71,34 @@ const userController = {
   },
 
   login: async (req, res) => {
+
     try {
+      const { username, password } = req.body;
+      const connection = await oracledb.getConnection(dbConfig);
+
+      const query = "SELECT MaNguoiDung, TenDangNhap, LoaiNguoiDung FROM Login WHERE TenDangNhap = :username AND MatKhau = :password";
+      const binds = { username, password };
+      const options = { outFormat: oracledb.OBJECT };
+
+      const result = await connection.execute(query, binds, options);
+
+      if (result.rows.length === 1) {
+        
+        const user = {
+          username: result.rows[0].TenDangNhap,
+          role: result.rows[0].LoaiNguoiDung,
+        };
+  
+        // Tạo access token từ thông tin người dùng
+        const accessToken = jwt.sign(user, process.env.SECRECT_KEY, {
+          expiresIn: "1h", // Thời gian hết hạn của token (ví dụ: 1 giờ)
+        });
+  
+        return res.json({ user, access_token: accessToken });
+      } else {
+        return res.send("Tai khoan hoac mat khau khong trung khop")
+      }
+
     } catch (error) {
       res.send(error);
     }

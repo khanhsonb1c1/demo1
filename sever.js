@@ -18,7 +18,8 @@ app.use(bodyParser.json());
 const oracledb = require("oracledb");
 const dbConfig = require("./config/connectDB.config");
 
-const userRoute = require("./routes/user.route")
+const userRoute = require("./routes/user.route");
+const monanRoute = require("./routes/monan.route")
 
 app.use(
   cors({
@@ -29,6 +30,9 @@ app.use(
 
 // Đăng nhập, đăng ký, lấy lại mật khẩu
 app.use("/user", userRoute);
+
+// Món ăn
+app.use("/monan", monanRoute);
 
 
 
